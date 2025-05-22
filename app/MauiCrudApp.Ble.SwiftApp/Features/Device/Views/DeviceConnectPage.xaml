@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<commonViews:PageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:commonViews="clr-namespace:MauiCrudApp.Common.Views;assembly=MauiCrudApp.Common"
+    x:Class="MauiCrudApp.Ble.SwiftApp.Features.Device.Views.DeviceConnectPage"
+    Title="DeviceConnectPage">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+            <Button Text="Scan" Command="{Binding ScanCommand}" />
+
+            <Label Text="{Binding SelectedBleDevice.Id}" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding SelectedBleDevice.Name}" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding SelectedBleDevice.ConnectionState}" HorizontalTextAlignment="Center" />
+            <Label Text="{Binding SelectedBleDevice.ConnectionError}" HorizontalTextAlignment="Center" />
+
+            <Button Text="Connect" Command="{Binding ConnectCommand}" IsEnabled="{Binding SelectedBleDevice.CanConnect}" />
+            <Button Text="Cancel Connecting" Command="{Binding CancelCommand}" IsEnabled="{Binding SelectedBleDevice.CanCancelConnecting}" />
+            <Button Text="Disconnect" Command="{Binding DisconnectCommand}" IsEnabled="{Binding SelectedBleDevice.CanDisconnect}" />
+
+            <Button Text="Reset" Command="{Binding ResetCommand}" IsEnabled="{Binding SelectedBleDevice.CanReset}" />
+
+
+
+            <!-- Services -->
+            <Label Text="Services" FontAttributes="Bold" FontSize="18" Margin="0,20,0,10" HorizontalTextAlignment="Center" />
+            <ActivityIndicator IsRunning="{Binding SelectedBleDevice.CanCancelConnecting}"
+                   IsVisible="{Binding SelectedBleDevice.CanCancelConnecting}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+            <CollectionView ItemsSource="{Binding SelectedBleDevice.Services}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" Padding="10" Margin="0,5">
+                            <StackLayout>
+                                <Label Text="{Binding Id}" FontAttributes="Bold" />
+                                <Label Text="{Binding Name}" />
+
+                                <!-- キャラクタリスティック一覧 -->
+                                <Label Text="Characteristics" FontAttributes="Bold" FontSize="16" Margin="0,10,0,5" />
+                                <CollectionView ItemsSource="{Binding Characteristics}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Frame BorderColor="LightGray" Padding="8" Margin="0,3">
+                                                <StackLayout>
+                                                    <Label Text="{Binding Id}" FontAttributes="Bold" />
+                                                    <Label Text="{Binding Name}" />
+                                                    <!--<Label Text="{Binding Value, Converter={StaticResource ByteArrayToStringConverter}}" FontSize="12" />-->
+                                                    <FlexLayout
+                                                        Wrap="Wrap"
+                                                        Direction="Row"
+                                                        AlignItems="Start"
+                                                        AlignContent="Start"
+                                                        JustifyContent="Start"
+                                                        VerticalOptions="Fill"
+                                                        >
+                                                        <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                                            <Label Text="CanRead:" />
+                                                            <Label Text="{Binding CanRead}" />
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                                            <Label Text="CanWrite:" />
+                                                            <Label Text="{Binding CanWrite}" />
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                                            <Label Text="WriteType:" />
+                                                            <Label Text="{Binding WriteType}" />
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                                            <Label Text="CanNotify:" />
+                                                            <Label Text="{Binding CanNotify}" />
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                                            <Label Text="IsNotifying:" />
+                                                            <Label Text="{Binding IsNotifying}" />
+                                                        </StackLayout>
+                                                    </FlexLayout>
+                                                </StackLayout>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </StackLayout>
+    </ScrollView>
+
+</commonViews:PageBase>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<shell:ShellBase
+    x:Class="MauiCrudApp.Ble.SwiftApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:shell="clr-namespace:MauiCrudApp.Common.Controls;assembly=MauiCrudApp.Common"
+    xmlns:local="clr-namespace:MauiCrudApp.Ble.SwiftApp"
+    xmlns:deviceViews="clr-namespace:MauiCrudApp.Ble.SwiftApp.Features.Device.Views"
+    xmlns:characteristicViews="clr-namespace:MauiCrudApp.Ble.SwiftApp.Features.Characteristic.Views"
+    Shell.FlyoutBehavior="Flyout"
+    Title="MauiCrudApp.Ble.SwiftApp">
+
+    <!--
+    <Shell.FlyoutBackgroundColor>
+        <Color>Red</Color>
+    </Shell.FlyoutBackgroundColor>
+    -->
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!--
+            <Style TargetType="Shell" ApplyToDerivedTypes="True">
+                <Setter Property="Shell.ItemTextColor" Value="Black" />
+            </Style>
+            -->
+            <ControlTemplate x:Key="FlyoutItemTemplate">
+                <Grid>
+                    <Label Text="{TemplateBinding Title}" 
+                       TextColor="Black" 
+                       FontSize="16" 
+                       VerticalOptions="Center" 
+                       Margin="10,0,0,0" />
+                </Grid>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+
+    <!-- Menu Header -->
+    <Shell.FlyoutHeader>
+        <StackLayout>
+            <Label Text="My App" FontSize="24" HorizontalOptions="Center" Padding="10" />
+        </StackLayout>
+    </Shell.FlyoutHeader>
+
+    <!-- Menu Item -->
+    <FlyoutItem Title="Home">
+        <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
+    </FlyoutItem>
+
+    <!-- Device -->
+    <FlyoutItem Title="Device">
+        <ShellContent Route="DeviceConnect" ContentTemplate="{DataTemplate deviceViews:DeviceConnectPage}" />
+    </FlyoutItem>
+
+    <!-- CharacteristicControlPage -->
+    <FlyoutItem Title="Characteristic">
+        <ShellContent Route="CharacteristicControl" ContentTemplate="{DataTemplate characteristicViews:CharacteristicControlPage}" />
+    </FlyoutItem>
+
+</shell:ShellBase>

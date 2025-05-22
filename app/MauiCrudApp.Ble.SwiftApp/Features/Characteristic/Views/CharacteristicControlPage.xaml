@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<commonViews:PageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:commonViews="clr-namespace:MauiCrudApp.Common.Views;assembly=MauiCrudApp.Common"
+    xmlns:converters="clr-namespace:MauiCrudApp.Ble.SwiftApp.Converters"
+    x:Class="MauiCrudApp.Ble.SwiftApp.Features.Characteristic.Views.CharacteristicControlPage"
+    Title="Characteristic Control">
+    <commonViews:PageBase.Resources>
+        <converters:BoolToStringConverter x:Key="BoolToStringConverter" />
+    </commonViews:PageBase.Resources>
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10">
+            <Label Text="Characteristics" FontAttributes="Bold" FontSize="18" HorizontalTextAlignment="Center" />
+
+            <CollectionView ItemsSource="{Binding Characteristics}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="LightGray" Padding="10" Margin="0,5">
+                            <StackLayout Spacing="5">
+                                <Label Text="{Binding Characteristic.Id}" FontAttributes="Bold" />
+                                <Label Text="{Binding Characteristic.Name}" />
+                                <Label Text="{Binding Characteristic.Value, Converter={StaticResource ByteArrayToHexConverter}}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+
+
+                                <!-- bps:Write -->
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label Text="Write speed:" FontSize="12" />
+                                    <Label Text="{Binding WriteBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                    <Label Text="Max:" FontSize="12" />
+                                    <Label Text="{Binding MaxWriteBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                </StackLayout>
+
+                                <!-- bps: Read -->
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label Text="Read speed:" FontSize="12" />
+                                    <Label Text="{Binding ReadBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                    <Label Text="Max:" FontSize="12" />
+                                    <Label Text="{Binding MaxReadBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                </StackLayout>
+
+                                <!-- bps: Notify -->
+                                <StackLayout Orientation="Horizontal" Spacing="10">
+                                    <Label Text="Notify speed:" FontSize="12" />
+                                    <Label Text="{Binding NotifyBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                    <Label Text="Max:" FontSize="12" />
+                                    <Label Text="{Binding MaxNotifyBps, StringFormat='{0:F2} bps'}" FontSize="12" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                                </StackLayout>
+
+
+
+                                <FlexLayout Wrap="Wrap" Direction="Row" JustifyContent="Start">
+                                    <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                        <Label Text="CanRead:" />
+                                        <Label Text="{Binding Characteristic.CanRead}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                        <Label Text="CanWrite:" />
+                                        <Label Text="{Binding Characteristic.CanWrite}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                        <Label Text="WriteType:" />
+                                        <Label Text="{Binding Characteristic.WriteType}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                        <Label Text="CanNotify:" />
+                                        <Label Text="{Binding Characteristic.CanNotify}" />
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal" Spacing="3" Margin="0,0,5,0">
+                                        <Label Text="IsNotifying:" />
+                                        <Label Text="{Binding Characteristic.IsNotifying}" />
+                                    </StackLayout>
+                                    
+                                </FlexLayout>
+
+                                <!-- Write UI: Show if CanWrite is true -->
+                                <StackLayout IsVisible="{Binding Characteristic.CanWrite}" Orientation="Horizontal" Spacing="5">
+                                    <!-- WriteType Picker -->
+                                    <Picker Title="Select Write Type"
+                                            ItemsSource="{Binding WriteTypeOptions}"
+                                            SelectedItem="{Binding Characteristic.WriteType, Mode=TwoWay}"
+                                            HorizontalOptions="FillAndExpand" />
+                                    <StackLayout Orientation="Horizontal" Spacing="5">
+                                        <Entry Placeholder="Enter text to write" Text="{Binding WriteValue}" HorizontalOptions="FillAndExpand" />
+                                        <Button Text="Write" Command="{Binding WriteCommand}" CommandParameter="{Binding Characteristic}" />
+                                    </StackLayout>
+                                </StackLayout>
+                                
+
+                                <!-- Notify UI: Show if CanNotify is true -->
+                                <Button IsVisible="{Binding Characteristic.CanNotify}" 
+                                        Text="{Binding Characteristic.IsNotifying, Converter={StaticResource BoolToNotifyTextConverter}}" 
+                                        Command="{Binding ToggleNotifyCommand}" 
+                                        CommandParameter="{Binding Characteristic}" />
+
+                                <!-- Read UI: Show if CanRead is true -->
+                                <StackLayout IsVisible="{Binding Characteristic.CanRead}" Spacing="5">
+                                    <Button Text="Read" Command="{Binding ReadCommand}" CommandParameter="{Binding Characteristic}" />
+                                    <CollectionView ItemsSource="{Binding ReadValues}" VerticalOptions="Start">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackLayout Orientation="Horizontal" Spacing="2">
+                                                    <Label Text="{Binding Source}" 
+                                                           FontSize="10" 
+                                                           LineBreakMode="TailTruncation" 
+                                                           MaxLines="1" />
+                                                    <Label Text="{Binding Value, Converter={StaticResource ByteArrayToHexConverter}}" 
+                                                           FontSize="10" 
+                                                           LineBreakMode="TailTruncation" 
+                                                           MaxLines="1" />
+                                                </StackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </StackLayout>
+
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Label Text="Interval (ms)" VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" />
+                <Entry Text="{Binding Interval}" IsEnabled="{Binding CanStartWriting}" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+            <Button Text="Start Writing" Command="{Binding StartWritingCommand}" IsEnabled="{Binding CanStartWriting}" />
+            <Button Text="Stop Writing" Command="{Binding StopWritingCommand}" IsEnabled="{Binding CanStopWriting}" />
+
+            <Button Text="Reset Max bps" Command="{Binding ResetMaxBpsCommand}" />
+
+        </StackLayout>
+    </ScrollView>
+
+</commonViews:PageBase>
