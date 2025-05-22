@@ -1,0 +1,47 @@
+# Build artifacts
+build/
+sdkconfig
+sdkconfig.old
+*.bin
+*.elf
+*.map
+
+# Temporary files
+*.o
+*.a
+*.d
+*.swp
+*~
+
+# Dependency management
+managed_components/
+components/**/managed_components/
+
+# Cache and logs
+*.cache
+*.log
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# Local configuration files
+.ccls
+compile_commands.json
+
+# Python virtual environments
+.venv/
+venv/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+
+# Project-specific secrets (add as needed)
+*.pem
+*.key
+*.cert
+secrets.h
